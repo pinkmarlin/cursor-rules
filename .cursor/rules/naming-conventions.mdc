@@ -1,0 +1,318 @@
+---
+description: Naming conventions - files, components, functions, variables, consistency patterns
+globs:
+alwaysApply: true
+---
+
+# 📝 Naming Conventions
+
+## File Naming
+
+### Components
+- **PascalCase** for React components: `UserProfile.tsx`, `NavigationBar.tsx`
+- Match component name to file name: `UserProfile` component in `UserProfile.tsx`
+- One component per file (except small, tightly coupled helpers)
+
+### Routes (Next.js App Router)
+- **lowercase** with hyphens: `user-profile/page.tsx`, `blog-post/[slug]/page.tsx`
+- Use `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, `not-found.tsx`
+- Group routes in folders: `(auth)/login/page.tsx`, `(dashboard)/settings/page.tsx`
+
+### Utilities and Hooks
+- **camelCase**: `formatDate.ts`, `useLocalStorage.ts`, `validateEmail.ts`
+- Hooks start with `use`: `useAuth.ts`, `useDebounce.ts`
+- Utilities are verbs or verb phrases: `formatCurrency.ts`, `parseQueryString.ts`
+
+### Constants and Config
+- **camelCase** for files: `config.ts`, `constants.ts`, `apiRoutes.ts`
+- **SCREAMING_SNAKE_CASE** for const values inside files
+- **PascalCase** for enum-like objects
+
+### Tests
+- Match source file with `.test` or `.spec` suffix
+- `UserProfile.test.tsx`, `formatDate.test.ts`
+- Keep tests adjacent to source files
+
+## Component Naming
+
+### React Components
+```tsx
+// ✅ Good - PascalCase, descriptive
+export function UserProfileCard() { }
+export const NavigationMenu = () => { }
+
+// ❌ Bad - camelCase, abbreviations
+export function userCard() { }
+export const NavMenu = () => { }
+```
+
+### Component Variants
+- Use descriptive suffixes: `Button`, `ButtonPrimary`, `ButtonSecondary`
+- Or compound names: `PrimaryButton`, `SecondaryButton`
+- Avoid generic names: `Button1`, `Button2`
+
+### Higher-Order Components
+- Prefix with `with`: `withAuth`, `withLayout`, `withErrorBoundary`
+
+### Context Providers
+- Suffix with `Provider`: `AuthProvider`, `ThemeProvider`
+- Match context name: `AuthContext` + `AuthProvider`
+
+## Function Naming
+
+### Event Handlers
+- Prefix with `handle`: `handleClick`, `handleSubmit`, `handleChange`
+- Be specific about the event: `handleEmailChange`, `handleFormSubmit`
+
+```tsx
+// ✅ Good
+const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => { }
+const handleFormSubmit = async (e: FormEvent) => { }
+
+// ❌ Bad
+const onChange = (e) => { }
+const submit = (e) => { }
+```
+
+### Boolean Functions
+- Use `is`, `has`, `can`, `should` prefixes
+- `isAuthenticated()`, `hasPermission()`, `canEdit()`, `shouldShowModal()`
+
+```tsx
+// ✅ Good
+function isUserAuthenticated(): boolean { }
+function hasAdminAccess(user: User): boolean { }
+
+// ❌ Bad
+function checkAuth(): boolean { }
+function adminAccess(user: User): boolean { }
+```
+
+### CRUD Operations
+- Be explicit: `createUser`, `getUser`, `updateUser`, `deleteUser`
+- Async operations: `fetchUser`, `saveUser`, `removeUser`
+- Bulk operations: `createUsers`, `deleteUsers` (plural)
+
+### Transformations
+- Use clear verbs: `formatDate`, `parseJSON`, `convertToUSD`, `normalizeData`
+- Input → Output: `userToDTO`, `dtoToUser`
+
+## Variable Naming
+
+### General Variables
+```tsx
+// ✅ Good - descriptive, camelCase
+const userEmail = 'user@example.com';
+const isLoading = false;
+const totalPrice = 100;
+
+// ❌ Bad - abbreviations, unclear
+const e = 'user@example.com';
+const loading = false;
+const price = 100; // total or unit price?
+```
+
+### Boolean Variables
+- Prefix with `is`, `has`, `should`, `can`
+- `isVisible`, `hasError`, `shouldRefetch`, `canSubmit`
+
+### Arrays and Collections
+- Use plural nouns: `users`, `products`, `blogPosts`
+- Or suffix with `List`: `userList`, `productList`
+
+### Constants
+```tsx
+// ✅ Good - SCREAMING_SNAKE_CASE
+export const MAX_RETRY_ATTEMPTS = 3;
+export const API_BASE_URL = 'https://api.example.com';
+export const DEFAULT_TIMEOUT_MS = 5000;
+
+// ❌ Bad - camelCase for constants
+export const maxRetryAttempts = 3;
+```
+
+### Enums and Enum-like Objects
+```tsx
+// ✅ Good - PascalCase enum, SCREAMING_SNAKE_CASE values
+enum UserRole {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  GUEST = 'GUEST',
+}
+
+// Or const object (preferred over enum)
+export const UserRole = {
+  ADMIN: 'ADMIN',
+  USER: 'USER',
+  GUEST: 'GUEST',
+} as const;
+```
+
+## Hook Naming
+
+### Custom Hooks
+- Always start with `use`: `useAuth`, `useLocalStorage`, `useDebounce`
+- Return arrays for multiple values: `const [value, setValue] = useLocalStorage('key')`
+- Return objects for named values: `const { user, login, logout } = useAuth()`
+
+```tsx
+// ✅ Good
+export function useAuth() {
+  return { user, login, logout, isAuthenticated };
+}
+
+export function useLocalStorage<T>(key: string) {
+  return [value, setValue] as const;
+}
+
+// ❌ Bad
+export function getAuth() { } // not a hook
+export function useUser() { } // too generic
+```
+
+## Type and Interface Naming
+
+### Types vs Interfaces
+- **PascalCase** for both
+- Prefer `type` over `interface` unless extending
+- No `I` prefix for interfaces
+
+```tsx
+// ✅ Good
+type User = { id: string; name: string };
+interface UserProfile extends User { bio: string }
+type ApiResponse<T> = { data: T; error?: string };
+
+// ❌ Bad
+type user = { id: string }; // lowercase
+interface IUser { } // I prefix
+```
+
+### Props Types
+- Suffix component props with `Props`
+- `UserCardProps`, `ButtonProps`, `FormInputProps`
+
+```tsx
+// ✅ Good
+type UserCardProps = {
+  user: User;
+  onEdit: (user: User) => void;
+};
+
+export function UserCard({ user, onEdit }: UserCardProps) { }
+
+// ❌ Bad
+type Props = { }; // too generic
+type UserCardProperties = { }; // verbose
+```
+
+### Generic Type Parameters
+- Single uppercase letter for simple generics: `T`, `K`, `V`
+- Descriptive names for complex generics: `TData`, `TError`, `TContext`
+
+```tsx
+// ✅ Good - simple generic
+function identity<T>(value: T): T { }
+
+// ✅ Good - complex generic
+type ApiHook<TData, TError = Error> = {
+  data?: TData;
+  error?: TError;
+};
+
+// ❌ Bad - unclear
+type ApiHook<A, B> = { };
+```
+
+## API and Route Naming
+
+### API Routes
+- RESTful conventions: `/api/users`, `/api/users/[id]`
+- Use HTTP verbs correctly: GET, POST, PUT/PATCH, DELETE
+- Plural for collections: `/api/products`
+- Singular for single resource: `/api/product/[id]`
+
+### Route Handlers
+```tsx
+// ✅ Good - descriptive exports
+export async function GET(request: Request) { }
+export async function POST(request: Request) { }
+
+// File: app/api/users/route.ts
+```
+
+## CSS Class Naming
+
+### Tailwind
+- Use semantic utility classes
+- Extract repeated patterns to components
+- Use Tailwind's @apply sparingly
+
+### Custom Classes (if needed)
+- BEM methodology: `block__element--modifier`
+- Or kebab-case descriptive names
+- Scope with component name prefix
+
+```css
+/* ✅ Good */
+.user-card { }
+.user-card__header { }
+.user-card__title--large { }
+
+/* ❌ Bad */
+.uc { }
+.header { }
+.title { }
+```
+
+## Import Organization
+
+### Import Order
+1. React and framework imports
+2. Third-party libraries
+3. Internal utilities and hooks
+4. Internal components
+5. Types
+6. Styles
+
+```tsx
+// ✅ Good - organized
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { clsx } from 'clsx';
+import { z } from 'zod';
+
+import { formatDate } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+
+import { Button } from '@/components/Button';
+import { Card } from '@/components/Card';
+
+import type { User } from '@/types';
+```
+
+## Consistency Rules
+
+1. **Stick to one convention per category** (don't mix camelCase and snake_case)
+2. **Match existing patterns in the codebase**
+3. **Be descriptive over clever** (`getUserById` > `getUBI`)
+4. **Use common terminology** (`create/update/delete` > `add/change/remove`)
+5. **Avoid abbreviations** unless universally understood (`id`, `url`, `api`)
+6. **Use positive names for booleans** (`isEnabled` > `isDisabled`)
+7. **Name tests clearly** (`should create user when valid data provided`)
+
+## Quick Reference
+
+| Category | Convention | Example |
+|----------|-----------|---------|
+| Components | PascalCase | `UserProfile.tsx` |
+| Hooks | useCamelCase | `useAuth.ts` |
+| Utilities | camelCase | `formatDate.ts` |
+| Constants | SCREAMING_SNAKE_CASE | `MAX_ATTEMPTS` |
+| Types/Interfaces | PascalCase | `User`, `ApiResponse` |
+| Props Types | PascalCase + Props | `ButtonProps` |
+| Event Handlers | handleCamelCase | `handleClick` |
+| Boolean Variables | is/has/can/should | `isLoading` |
+| Files (routes) | kebab-case | `user-profile/page.tsx` |
+| CSS Classes | kebab-case | `user-card` |

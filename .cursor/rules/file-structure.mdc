@@ -1,0 +1,27 @@
+---
+description: File and component structure standards - max file size, reusable components, imports, theming
+globs:
+alwaysApply: true
+---
+
+# File & Component Structure
+
+## Max File Size
+- No file should exceed **200 lines of code**. 
+- If it does, break it into reusable, well-named components.
+
+## Reusable Components
+- Whenever a UI pattern is reused, create a component. 
+- Refactor inline usage across the app to adopt it.
+
+## Imports
+- Always ensure required modules are imported explicitly. 
+- No "undefined" errors should ever appear due to missing imports.
+
+## Dark/Light Theme
+- All new UI must support both light and dark themes unless explicitly documented otherwise.
+
+## Responsiveness
+- All layouts, headers, and navigation elements must be **fully responsive and mobile-friendly**. 
+- Ensure smooth, professional transitions between breakpoints. 
+- Use Tailwind responsive utilities effectively.

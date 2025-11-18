@@ -1,0 +1,30 @@
+---
+description: Next.js conventions - App Router only, explicit file-based routes, server components by default
+globs:
+  - "**/*.tsx"
+  - "**/*.ts"
+  - "**/app/**"
+  - "**/src/app/**"
+alwaysApply: true
+---
+
+# Next.js Conventions (App Router Only)
+
+## Only Use App Router
+- **Only use the App Router** (`/app` or `/src/app` directories). 
+- Do not use the legacy `pages/` directory.
+
+## Explicit File-Based Routes
+Routing for entities must follow **explicit file-based routes**:
+- `/app/entity/create/page.tsx` → creation form  
+- `/app/entity/[id]/page.tsx` or `/app/entity/[slug]/page.tsx` → detail view  
+- `/app/entity/[id]/update/page.tsx` → update form  
+- `/app/entity/[id]/manage/page.tsx` → management view  
+- (same conventions apply if project uses `/src/app` instead of `/app`)
+
+## No State Multiplexing
+- **Do not** multiplex create/edit/show/manage states inside a single route. 
+- Routing must represent application state clearly.
+
+## Server Components by Default
+- Use **server components by default**, and introduce client components only when stateful interactivity is required.

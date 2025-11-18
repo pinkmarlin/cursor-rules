@@ -1,0 +1,421 @@
+---
+description: Error handling patterns - error boundaries, try-catch, user feedback, logging, graceful degradation
+globs:
+alwaysApply: true
+---
+
+# 🚨 Error Handling
+
+## Core Principles
+- **Fail gracefully**: Never show raw error messages or stack traces to users
+- **Provide context**: Users should understand what went wrong and what to do
+- **Log everything**: Errors should be logged with context for debugging
+- **Recover when possible**: Offer fallbacks and recovery options
+- **Don't swallow errors**: Always handle or propagate errors
+
+## Error Boundaries (React)
+
+### Always Use Error Boundaries
+- Wrap route segments with error boundaries
+- Provide fallback UI with recovery options
+- Log errors to monitoring service
+
+```tsx
+// ✅ Good - error.tsx in Next.js App Router
+'use client';
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    // Log to error monitoring service
+    console.error('Error boundary caught:', error);
+  }, [error]);
+
+  return (
+    <div className="error-container">
+      <h2>Something went wrong</h2>
+      <p>We're sorry for the inconvenience. Please try again.</p>
+      <button onClick={reset}>Try again</button>
+    </div>
+  );
+}
+```
+
+### Granular Error Boundaries
+- Don't just wrap the root—wrap individual features
+- Allow parts of the page to fail without crashing everything
+- Provide component-level error boundaries for critical sections
+
+```tsx
+// ✅ Good - component-level boundary
+function UserDashboard() {
+  return (
+    <div>
+      <Header /> {/* If this fails, rest of page still works */}
+      <ErrorBoundary fallback={<FeedError />}>
+        <UserFeed /> {/* Isolated error boundary */}
+      </ErrorBoundary>
+      <ErrorBoundary fallback={<SidebarError />}>
+        <Sidebar />
+      </ErrorBoundary>
+    </div>
+  );
+}
+```
+
+## Async Error Handling
+
+### Always Use Try-Catch
+```tsx
+// ✅ Good - proper error handling
+async function fetchUser(id: string) {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    // Re-throw or return error state
+    throw new Error('Unable to load user data. Please try again.');
+  }
+}
+
+// ❌ Bad - no error handling
+async function fetchUser(id: string) {
+  const response = await fetch(`/api/users/${id}`);
+  return response.json();
+}
+```
+
+### Server Actions (Next.js)
+```tsx
+// ✅ Good - typed error responses
+'use server';
+
+export async function createUser(data: FormData) {
+  try {
+    const email = data.get('email') as string;
+    
+    // Validation
+    if (!email) {
+      return { success: false, error: 'Email is required' };
+    }
+    
+    // Business logic
+    const user = await db.user.create({ data: { email } });
+    
+    revalidatePath('/users');
+    return { success: true, data: user };
+  } catch (error) {
+    console.error('Failed to create user:', error);
+    return { 
+      success: false, 
+      error: 'Failed to create user. Please try again.' 
+    };
+  }
+}
+```
+
+## API Error Handling
+
+### Standardized Error Responses
+```tsx
+// ✅ Good - consistent error format
+export async function GET(request: Request) {
+  try {
+    const data = await fetchData();
+    return Response.json({ success: true, data });
+  } catch (error) {
+    console.error('API Error:', error);
+    
+    return Response.json(
+      { 
+        success: false, 
+        error: 'Failed to fetch data',
+        code: 'FETCH_ERROR'
+      },
+      { status: 500 }
+    );
+  }
+}
+```
+
+### HTTP Status Codes
+Use appropriate status codes:
+- `200` - Success
+- `201` - Created
+- `400` - Bad Request (client error)
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Not Found
+- `422` - Unprocessable Entity (validation error)
+- `500` - Internal Server Error
+- `503` - Service Unavailable
+
+### Validation Errors
+```tsx
+// ✅ Good - detailed validation errors
+import { z } from 'zod';
+
+const userSchema = z.object({
+  email: z.string().email('Invalid email format'),
+  age: z.number().min(18, 'Must be 18 or older'),
+});
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const validated = userSchema.parse(body);
+    
+    // Process validated data
+    return Response.json({ success: true });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return Response.json(
+        { 
+          success: false, 
+          error: 'Validation failed',
+          details: error.errors 
+        },
+        { status: 422 }
+      );
+    }
+    
+    return Response.json(
+      { success: false, error: 'Internal error' },
+      { status: 500 }
+    );
+  }
+}
+```
+
+## User-Facing Error Messages
+
+### Clear, Actionable Messages
+```tsx
+// ✅ Good - helpful message with action
+"Unable to save your changes. Please check your connection and try again."
+
+// ❌ Bad - technical jargon
+"POST /api/users failed with status 500"
+
+// ❌ Bad - no context
+"Error"
+```
+
+### Error Message Patterns
+- **Network errors**: "Unable to connect. Please check your internet connection."
+- **Validation errors**: "Email is required" or "Password must be at least 8 characters"
+- **Permission errors**: "You don't have permission to access this resource."
+- **Not found**: "We couldn't find that page. It may have been moved or deleted."
+- **Server errors**: "Something went wrong on our end. We're working to fix it."
+
+### Toast Notifications
+```tsx
+// ✅ Good - contextual toast
+import { toast } from 'sonner';
+
+try {
+  await saveUser(data);
+  toast.success('Profile updated successfully');
+} catch (error) {
+  toast.error('Failed to update profile. Please try again.');
+  console.error('Save error:', error);
+}
+```
+
+## Form Error Handling
+
+### Field-Level Validation
+```tsx
+// ✅ Good - show errors next to fields
+<div>
+  <label htmlFor="email">Email</label>
+  <input
+    id="email"
+    type="email"
+    aria-invalid={!!errors.email}
+    aria-describedby={errors.email ? 'email-error' : undefined}
+  />
+  {errors.email && (
+    <p id="email-error" className="error-text">
+      {errors.email}
+    </p>
+  )}
+</div>
+```
+
+### Form-Level Errors
+```tsx
+// ✅ Good - summary of form errors
+{formError && (
+  <div role="alert" className="form-error">
+    <strong>Unable to submit form:</strong>
+    <ul>
+      {Object.entries(errors).map(([field, message]) => (
+        <li key={field}>{message}</li>
+      ))}
+    </ul>
+  </div>
+)}
+```
+
+## Loading and Error States
+
+### Always Handle All States
+```tsx
+// ✅ Good - all states handled
+function UserProfile({ userId }: { userId: string }) {
+  const { data, error, isLoading } = useUser(userId);
+  
+  if (isLoading) return <Skeleton />;
+  if (error) return <ErrorState error={error} retry={() => refetch()} />;
+  if (!data) return <NotFound />;
+  
+  return <ProfileCard user={data} />;
+}
+
+// ❌ Bad - no error state
+function UserProfile({ userId }: { userId: string }) {
+  const { data } = useUser(userId);
+  return <ProfileCard user={data} />; // crashes if data is undefined
+}
+```
+
+## Graceful Degradation
+
+### Fallback Content
+```tsx
+// ✅ Good - fallback when feature fails
+function UserAvatar({ userId }: { userId: string }) {
+  const [error, setError] = useState(false);
+  
+  if (error) {
+    // Fallback to initials
+    return <InitialsAvatar userId={userId} />;
+  }
+  
+  return (
+    <img
+      src={`/avatars/${userId}`}
+      alt="User avatar"
+      onError={() => setError(true)}
+    />
+  );
+}
+```
+
+### Optional Features
+```tsx
+// ✅ Good - degrade gracefully if analytics fails
+try {
+  trackEvent('page_view', { page: '/dashboard' });
+} catch (error) {
+  console.error('Analytics error:', error);
+  // Continue - don't block user experience
+}
+```
+
+## Error Logging
+
+### Context-Rich Logging
+```tsx
+// ✅ Good - include context
+try {
+  await processPayment(userId, amount);
+} catch (error) {
+  console.error('Payment processing failed:', {
+    error,
+    userId,
+    amount,
+    timestamp: new Date().toISOString(),
+  });
+  
+  // Send to monitoring service
+  captureException(error, {
+    tags: { feature: 'payment' },
+    extra: { userId, amount },
+  });
+  
+  throw new Error('Payment failed. Please try again.');
+}
+
+// ❌ Bad - no context
+try {
+  await processPayment(userId, amount);
+} catch (error) {
+  console.error(error);
+  throw error;
+}
+```
+
+### Never Log Sensitive Data
+```tsx
+// ❌ Bad - logging sensitive data
+console.error('Auth failed:', { password, creditCard });
+
+// ✅ Good - sanitized logging
+console.error('Auth failed:', { 
+  userId,
+  timestamp,
+  // Never log passwords, tokens, card numbers, etc.
+});
+```
+
+## Retry Logic
+
+### Smart Retries
+```tsx
+// ✅ Good - exponential backoff
+async function fetchWithRetry(url: string, maxRetries = 3) {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(url);
+      if (response.ok) return response.json();
+      
+      // Don't retry client errors (4xx)
+      if (response.status >= 400 && response.status < 500) {
+        throw new Error('Client error');
+      }
+      
+      // Retry server errors (5xx)
+      if (attempt < maxRetries) {
+        await new Promise(resolve => 
+          setTimeout(resolve, Math.pow(2, attempt) * 1000)
+        );
+        continue;
+      }
+      
+      throw new Error('Max retries exceeded');
+    } catch (error) {
+      if (attempt === maxRetries) throw error;
+    }
+  }
+}
+```
+
+## Checklist
+
+Before shipping error-prone features:
+
+- [ ] Error boundaries in place
+- [ ] All async operations wrapped in try-catch
+- [ ] User-friendly error messages (no stack traces)
+- [ ] Loading and error states handled
+- [ ] Form validation with field-level errors
+- [ ] Errors logged with context
+- [ ] Fallback UI for failed features
+- [ ] Retry logic for network errors
+- [ ] Appropriate HTTP status codes
+- [ ] No sensitive data in logs
+- [ ] Error monitoring configured (Sentry, etc.)

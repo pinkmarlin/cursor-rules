@@ -1,0 +1,444 @@
+---
+description: State management patterns - when to use useState, Context, URL state, server state, Zustand, etc.
+globs:
+  - "**/*.tsx"
+  - "**/*.ts"
+alwaysApply: true
+---
+
+# 🗂️ State Management
+
+## Principles
+- **Start simple**: Use the simplest solution that works
+- **Colocate state**: Keep state as close to where it's used as possible
+- **Server state ≠ Client state**: Treat them differently
+- **URL as source of truth**: For shareable/bookmarkable state
+- **Lift state only when necessary**: Don't prematurely optimize
+
+## State Categories
+
+### 1. Server State
+**Definition**: Data from the server (users, posts, products)
+
+**Tools**: 
+- Server Components (Next.js) - preferred
+- SWR / React Query / TanStack Query
+- Convex hooks
+
+**Rules**:
+- Fetch in Server Components when possible
+- Use SWR/Query for client-side data fetching
+- Cache aggressively with proper revalidation
+- Never store in useState/Context (it's not client state)
+
+```tsx
+// ✅ Good - Server Component
+async function UserProfile({ userId }: { userId: string }) {
+  const user = await db.user.findUnique({ where: { id: userId } });
+  return <ProfileCard user={user} />;
+}
+
+// ✅ Good - Client-side with SWR
+'use client';
+import useSWR from 'swr';
+
+function UserProfile({ userId }: { userId: string }) {
+  const { data: user, error } = useSWR(`/api/users/${userId}`);
+  // ... handle loading/error states
+}
+
+// ❌ Bad - useState for server data
+const [user, setUser] = useState(null);
+useEffect(() => {
+  fetch(`/api/users/${userId}`).then(res => setUser(res));
+}, [userId]);
+```
+
+### 2. URL State
+**Definition**: State that should be shareable/bookmarkable (filters, search, pagination)
+
+**Tools**:
+- Next.js `useSearchParams` / `useRouter`
+- URL query parameters
+
+**Rules**:
+- Filters, search, pagination → URL params
+- Modal open/closed → URL param or hash
+- Tab selection → URL param
+- Sort order → URL param
+
+```tsx
+// ✅ Good - search in URL
+'use client';
+import { useRouter, useSearchParams } from 'next/navigation';
+
+function SearchBar() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const query = searchParams.get('q') ?? '';
+
+  const handleSearch = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (value) {
+      params.set('q', value);
+    } else {
+      params.delete('q');
+    }
+    router.push(`/search?${params.toString()}`);
+  };
+
+  return <input value={query} onChange={(e) => handleSearch(e.target.value)} />;
+}
+
+// ❌ Bad - search in useState (not shareable)
+const [query, setQuery] = useState('');
+```
+
+### 3. Local Component State
+**Definition**: State used only within a single component
+
+**Tools**: `useState`, `useReducer`
+
+**Rules**:
+- Form inputs (uncontrolled)
+- Toggle states (dropdown open/closed)
+- Temporary UI state
+- Keep it local until you need to share it
+
+```tsx
+// ✅ Good - local toggle state
+function Dropdown() {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <div>
+      <button onClick={() => setIsOpen(!isOpen)}>Toggle</button>
+      {isOpen && <DropdownMenu />}
+    </div>
+  );
+}
+
+// ❌ Bad - premature Context for local state
+const DropdownContext = createContext();
+// This is overkill if only one dropdown
+```
+
+### 4. Shared Component State
+**Definition**: State shared between a few related components
+
+**Tools**: 
+- Lift state to common parent
+- Context (for deeply nested components)
+
+**Rules**:
+- Lift state to the nearest common ancestor
+- Use Context only if prop drilling is excessive (>3 levels)
+- Keep Context scoped (don't make everything global)
+
+```tsx
+// ✅ Good - lift state to parent
+function Form() {
+  const [formData, setFormData] = useState({});
+  
+  return (
+    <>
+      <EmailInput value={formData.email} onChange={(email) => setFormData({...formData, email})} />
+      <PasswordInput value={formData.password} onChange={(password) => setFormData({...formData, password})} />
+      <SubmitButton data={formData} />
+    </>
+  );
+}
+
+// ✅ Good - Context for deep nesting
+const FormContext = createContext();
+
+function Form() {
+  const [formData, setFormData] = useState({});
+  
+  return (
+    <FormContext.Provider value={{ formData, setFormData }}>
+      <FormLayout>
+        <FormSection>
+          <DeepNestedInput /> {/* Can access formData without prop drilling */}
+        </FormSection>
+      </FormLayout>
+    </FormContext.Provider>
+  );
+}
+```
+
+### 5. Global Client State
+**Definition**: State needed across many unrelated components
+
+**Tools**:
+- Zustand (recommended)
+- Jotai
+- Context (for simple cases)
+- Avoid Redux unless you have specific needs
+
+**Rules**:
+- Use for true global state (user session, theme, UI preferences)
+- Don't use for server state
+- Keep it minimal
+
+```tsx
+// ✅ Good - Zustand for global state
+import { create } from 'zustand';
+
+const useAuthStore = create((set) => ({
+  user: null,
+  setUser: (user) => set({ user }),
+  logout: () => set({ user: null }),
+}));
+
+// Use anywhere
+function Header() {
+  const { user, logout } = useAuthStore();
+  return <button onClick={logout}>Logout {user?.name}</button>;
+}
+
+// ❌ Bad - Context for complex global state
+// Context causes re-renders of all consumers when any part changes
+```
+
+### 6. Form State
+**Definition**: Form inputs, validation, submission
+
+**Tools**:
+- React Hook Form (recommended)
+- Server Actions (Next.js)
+- Uncontrolled inputs with FormData
+
+**Rules**:
+- Prefer uncontrolled inputs with React Hook Form
+- Use Server Actions for form submission
+- Client-side validation + server-side validation
+- Don't manage every input in useState
+
+```tsx
+// ✅ Good - React Hook Form
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+function SignupForm() {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(signupSchema),
+  });
+
+  const onSubmit = async (data) => {
+    await createUser(data); // Server Action
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register('email')} />
+      {errors.email && <p>{errors.email.message}</p>}
+      <button type="submit">Sign Up</button>
+    </form>
+  );
+}
+
+// ❌ Bad - manual state for every field
+const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
+const [emailError, setEmailError] = useState('');
+// ...too much boilerplate
+```
+
+## Decision Tree
+
+```
+Is this state from the server (users, posts, etc.)?
+├─ Yes → Use Server Components or SWR/React Query
+└─ No → Continue
+
+Should this state be shareable via URL (filters, search)?
+├─ Yes → Use URL params (useSearchParams)
+└─ No → Continue
+
+Is this state used only in one component?
+├─ Yes → Use useState
+└─ No → Continue
+
+Is this state shared between a few nearby components?
+├─ Yes → Lift to common parent
+└─ No → Continue
+
+Is this state needed across many unrelated components?
+├─ Yes → Use Zustand or Context
+└─ No → Re-evaluate if you actually need state management
+```
+
+## Common Patterns
+
+### Derived State
+Don't store what you can calculate:
+
+```tsx
+// ✅ Good - derive state
+function ShoppingCart({ items }) {
+  const total = items.reduce((sum, item) => sum + item.price, 0);
+  const itemCount = items.length;
+  
+  return <div>Total: ${total} ({itemCount} items)</div>;
+}
+
+// ❌ Bad - duplicate state
+const [items, setItems] = useState([]);
+const [total, setTotal] = useState(0);
+const [itemCount, setItemCount] = useState(0);
+// Now you have to keep these in sync
+```
+
+### Optimistic Updates
+Update UI immediately, rollback on error:
+
+```tsx
+// ✅ Good - optimistic with SWR
+import useSWR, { mutate } from 'swr';
+
+function LikeButton({ postId }) {
+  const { data } = useSWR(`/api/posts/${postId}`);
+  
+  const handleLike = async () => {
+    // Optimistically update UI
+    mutate(
+      `/api/posts/${postId}`,
+      { ...data, likes: data.likes + 1 },
+      false // don't revalidate yet
+    );
+    
+    try {
+      await likePost(postId);
+      // Revalidate to get server state
+      mutate(`/api/posts/${postId}`);
+    } catch (error) {
+      // Rollback on error
+      mutate(`/api/posts/${postId}`);
+    }
+  };
+  
+  return <button onClick={handleLike}>Like ({data?.likes})</button>;
+}
+```
+
+### Computed Values (useMemo)
+Memoize expensive calculations:
+
+```tsx
+// ✅ Good - memoize expensive computation
+const sortedAndFilteredUsers = useMemo(() => {
+  return users
+    .filter(user => user.active)
+    .sort((a, b) => a.name.localeCompare(b.name));
+}, [users]);
+
+// ❌ Bad - recalculate on every render
+const sortedAndFilteredUsers = users
+  .filter(user => user.active)
+  .sort((a, b) => a.name.localeCompare(b.name));
+```
+
+### State Colocation
+Keep state close to where it's used:
+
+```tsx
+// ✅ Good - state colocated with usage
+function ExpandableSection() {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  return (
+    <div>
+      <button onClick={() => setIsExpanded(!isExpanded)}>Toggle</button>
+      {isExpanded && <Content />}
+    </div>
+  );
+}
+
+// ❌ Bad - state far from usage
+function ParentComponent() {
+  const [section1Expanded, setSection1Expanded] = useState(false);
+  const [section2Expanded, setSection2Expanded] = useState(false);
+  const [section3Expanded, setSection3Expanded] = useState(false);
+  
+  return (
+    <>
+      <ExpandableSection expanded={section1Expanded} setExpanded={setSection1Expanded} />
+      <ExpandableSection expanded={section2Expanded} setExpanded={setSection2Expanded} />
+      <ExpandableSection expanded={section3Expanded} setExpanded={setSection3Expanded} />
+    </>
+  );
+}
+```
+
+## Anti-Patterns
+
+### ❌ Using Context for Everything
+```tsx
+// Bad - massive Context with unrelated state
+const AppContext = createContext();
+
+function AppProvider({ children }) {
+  const [user, setUser] = useState();
+  const [theme, setTheme] = useState();
+  const [notifications, setNotifications] = useState([]);
+  const [cart, setCart] = useState([]);
+  // ... everything
+  
+  // Every update re-renders ALL consumers
+}
+
+// ✅ Good - separate contexts
+const UserContext = createContext();
+const ThemeContext = createContext();
+const NotificationsContext = createContext();
+```
+
+### ❌ Storing Server Data in useState
+```tsx
+// Bad - manual fetch and state management
+const [users, setUsers] = useState([]);
+
+useEffect(() => {
+  fetch('/api/users').then(res => setUsers(res));
+}, []);
+
+// ✅ Good - use server state library
+const { data: users } = useSWR('/api/users');
+```
+
+### ❌ Prop Drilling Instead of Composition
+```tsx
+// Bad - drilling props through multiple levels
+<Parent>
+  <Child user={user} theme={theme} onAction={handleAction}>
+    <GrandChild user={user} theme={theme} onAction={handleAction}>
+      <GreatGrandChild user={user} theme={theme} onAction={handleAction} />
+    </GrandChild>
+  </Child>
+</Parent>
+
+// ✅ Good - component composition
+<Parent>
+  <Child>
+    <GrandChild>
+      <GreatGrandChild /> {/* Gets what it needs from Context or props */}
+    </GrandChild>
+  </GrandChild>
+  </Child>
+</Parent>
+```
+
+## Quick Reference
+
+| State Type | Tool | Example |
+|------------|------|---------|
+| Server data | Server Components, SWR | Users, posts, products |
+| URL state | useSearchParams | Filters, search, pagination |
+| Local UI | useState | Dropdown open, form input |
+| Shared nearby | Lift state up | Form data across fields |
+| Global client | Zustand | User session, theme |
+| Form | React Hook Form | Complex forms with validation |
+| Derived | useMemo | Computed values from other state |
+
+**Golden Rule**: Use the least powerful tool that solves your problem. Start with useState, only add complexity when necessary.

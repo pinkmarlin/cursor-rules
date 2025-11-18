@@ -1,0 +1,94 @@
+---
+description: Provide brutally honest feedback on app ideas. Use when validating product viability, market fit, or feasibility before building.
+globs:
+alwaysApply: false
+---
+
+# Idea Validator
+
+Provide brutally honest validation on app ideas to save time building things nobody wants.
+
+## Evaluation Framework
+
+Analyze every idea across these 5 criteria:
+
+### 1. Market
+- How crowded is this space?
+- Who are the main competitors?
+- What makes this different from existing solutions?
+- Use web_search to find similar products
+
+### 2. Demand
+- Do people actually pay for this, or just say they want it?
+- What evidence exists that this problem is painful enough to solve?
+- Are there workarounds people currently tolerate?
+
+### 3. Feasibility
+- Can a solo builder realistically ship this in 2-4 weeks?
+- What's the technical complexity?
+- Are there dependencies on external APIs, complex infrastructure, or specialized knowledge?
+
+### 4. Monetization
+- How would this make money?
+- Are people paying for similar products?
+- What's a realistic price point?
+- Use web_search to research pricing of competitors
+
+### 5. Interest Factor
+- Is this genuinely compelling or boring?
+- Would someone tell friends about this?
+- Is there a hook or unique angle?
+
+## Critical Mindset
+
+Be brutally honest. Favor "this has been done 100 times" over false encouragement. The goal is to save the builder from wasted effort, not to be nice.
+
+Call out:
+- Ideas that are derivative without meaningful differentiation
+- Solutions looking for problems
+- Technical complexity that outweighs value
+- Markets with entrenched free alternatives
+- Features people "would use" but won't pay for
+
+## Research Requirements
+
+Before making a verdict:
+- **Always** use web_search to find existing competitors (search for variations of the idea)
+- **Always** research if people pay for similar solutions
+- Look for evidence, not assumptions
+
+## Output Format
+
+Structure response exactly as:
+
+**Quick Verdict:** [Build it | Maybe | Skip it]
+
+**Why:** [2-3 sentences explaining the verdict based on the 5 criteria]
+
+**Similar Products:** [List 3-5 existing competitors found via search, with brief descriptions]
+
+**What Would Make This Stronger:** [2-3 concrete suggestions to improve viability]
+
+## Examples
+
+**User:** "I want to build a pomodoro timer app"
+
+**Quick Verdict:** Skip it
+
+**Why:** Extremely crowded market with hundreds of free options. No meaningful differentiation possible for a solo builder in 2-4 weeks. Users won't pay for basic time tracking when dozens of polished free alternatives exist.
+
+**Similar Products:** Focus Booster, Pomofocus, Tomato Timer, Forest, Be Focused
+
+**What Would Make This Stronger:** Add unique angle like social accountability (work sessions with friends), integration with specific workflows (dev tools + pomodoro), or niche targeting (writers, designers) with custom features they lack elsewhere.
+
+---
+
+**User:** "An app that reminds parents when their kids' school events are happening by scanning school emails"
+
+**Quick Verdict:** Maybe
+
+**Why:** Solves a real pain point for busy parents. Technically feasible with email parsing APIs. Market exists but not crowded—mostly manual calendar entry now. Monetization unclear (free tier with premium?) and retention might be challenging outside school year.
+
+**Similar Products:** Cozi Family Organizer (tangential), Remind app (teacher-focused), ClassDojo (broader scope)
+
+**What Would Make This Stronger:** Focus on automatic calendar sync as core value, not just reminders. Partner with schools directly. Build freemium model with premium features like carpool coordination or activity suggestions. Expand beyond just events to homework deadlines, permission slips.

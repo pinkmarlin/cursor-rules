@@ -1,0 +1,172 @@
+---
+description: Write marketing content with casual, direct voice. Use for landing page copy, tweet threads, launch emails, or any marketing content.
+globs:
+alwaysApply: false
+---
+
+# Marketing Writer
+
+Write marketing content that's casual, direct, and focused on real benefits—no corporate buzzwords or hype.
+
+## Brand Voice Guidelines
+
+### Core Principles
+
+**Casual and direct:**
+- Write like talking to a friend
+- Use contractions (you're, it's, don't)
+- Second person (you, your)
+- Active voice
+
+**No corporate speak:**
+- Avoid: leverage, synergy, solution, ecosystem, empower, revolutionize
+- Avoid: cutting-edge, game-changing, world-class, innovative
+- Use: help, make, build, get, save
+
+**Focus on real benefits:**
+- Not: "Streamlines your workflow"
+- Yes: "Saves you 2 hours a day"
+- Not: "Optimizes productivity"
+- Yes: "Get more done without the stress"
+
+**Simple language:**
+- Short sentences
+- Common words
+- No jargon unless necessary
+- Explain technical terms simply
+
+## Content Templates
+
+### Landing Page Feature Section
+
+**Format:** Problem → Solution → Benefit
+
+```markdown
+## [Feature Name - Keep it Simple]
+
+[One sentence describing the problem this solves]
+
+[2-3 sentences explaining how it works, in plain language]
+
+[One sentence on the benefit/outcome]
+```
+
+**Example:**
+
+```markdown
+## Get Feedback Without the Back-and-Forth
+
+Sending mockups via email and waiting for feedback kills momentum.
+
+Share a link. Your client clicks on the design and leaves comments right there. You see them instantly.
+
+Stop the email tennis. Ship designs faster.
+```
+
+### Tweet Thread
+
+**Format:** Hook → Credibility → Value → CTA
+
+**Structure:**
+```
+Tweet 1 (Hook):
+[Relatable problem or bold claim that stops scrolling]
+
+Tweet 2 (Build credibility):
+[Why this matters / Why you should listen]
+
+Tweet 3-4 (Show value):
+[Specific examples or benefits]
+[How it works / What makes it different]
+
+Tweet 5 (CTA):
+[Clear next step - try it, learn more, etc.]
+```
+
+### Launch Email
+
+**Format:** Personal intro → Specific value → Easy CTA
+
+```
+Subject: [Direct, benefit-focused, < 50 chars]
+
+Hey [name],
+
+[Personal opening - 1 sentence acknowledging them]
+
+[The problem - 1-2 sentences]
+
+[What you built - 1-2 sentences, focus on benefit]
+
+[How it works - 2-3 short sentences or bullets]
+
+[Clear, easy CTA - what to do next]
+
+[Casual sign-off]
+```
+
+## Common Mistakes to Avoid
+
+### ❌ Using buzzwords
+"Revolutionary AI-powered solution"
+
+**Fix:** Describe what it actually does
+"Uses AI to categorize your expenses automatically"
+
+### ❌ Being vague about benefits
+"Makes your workflow more efficient"
+
+**Fix:** Be specific
+"Cuts your weekly reporting from 3 hours to 10 minutes"
+
+### ❌ Feature-dumping
+"Includes advanced analytics, real-time sync, custom dashboards, API access..."
+
+**Fix:** Focus on ONE main benefit per section
+"See which features people use. Make better product decisions."
+
+### ❌ Corporate language
+"We're excited to announce..."
+
+**Fix:** Talk like a person
+"Made something that fixes this annoying problem..."
+
+### ❌ Wall of text
+Long paragraphs explaining every detail
+
+**Fix:** Short sentences, white space, bullets
+Break it up. Make it scannable.
+
+## Review Checklist
+
+Before sending any marketing content, verify:
+
+- [ ] Sounds conversational (read it out loud)
+- [ ] No buzzwords (leverage, synergy, revolutionize, etc.)
+- [ ] Focuses on specific benefits, not vague claims
+- [ ] Uses simple language (no jargon)
+- [ ] Short sentences and paragraphs
+- [ ] Explains how it works clearly
+- [ ] Has clear CTA
+- [ ] Feels authentic, not salesy
+
+## Quick Reference: Word Swaps
+
+| ❌ Don't Say | ✅ Say Instead |
+|-------------|---------------|
+| Leverage | Use |
+| Solution | Tool / App |
+| Revolutionize | Make easier / Fix |
+| Cutting-edge | New / Modern |
+| Synergy | Work together |
+| Optimize | Improve / Make better |
+| Empower | Help / Let you |
+| Seamless | Easy / Simple |
+| Robust | Reliable |
+| Enterprise-grade | Professional / Serious |
+| Game-changing | Really useful |
+| Transform | Change / Improve |
+| Innovative | Different / New |
+| Ecosystem | Tools |
+
+**When in doubt:** Use the simpler, more common word.

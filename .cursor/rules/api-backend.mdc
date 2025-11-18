@@ -1,0 +1,22 @@
+---
+description: API and backend standards - contracts, error handling, caching
+globs:
+  - "**/api/**"
+  - "**/server/**"
+  - "**/backend/**"
+alwaysApply: true
+---
+
+# 🌐 API & Backend Rules
+
+## API Contracts
+- Always define/update API contracts (`openapi.yaml` or `tRPC contracts`) when backend interfaces change.
+
+## Error Handling
+- Always return typed errors with helpful messages for consumers.
+- Include enough context for debugging
+- Use consistent error formats
+
+## Caching
+- Prefer SWR/react-query or server-side caching for expensive queries.
+- Implement appropriate cache invalidation strategies

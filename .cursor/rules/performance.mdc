@@ -1,0 +1,173 @@
+---
+description: Performance standards - Core Web Vitals, bundle size, lazy loading, optimization patterns
+globs:
+alwaysApply: true
+---
+
+# ⚡ Performance Standards
+
+## Core Web Vitals Targets
+- **LCP (Largest Contentful Paint)**: < 2.5s
+- **FID (First Input Delay)**: < 100ms
+- **CLS (Cumulative Layout Shift)**: < 0.1
+- **TTFB (Time to First Byte)**: < 600ms
+
+Monitor these metrics in production, not just development.
+
+## Bundle Size Budgets
+- **Initial JS bundle**: < 200KB gzipped
+- **Initial CSS bundle**: < 50KB gzipped
+- **Total page weight**: < 1MB initial load
+- **Third-party scripts**: < 50KB combined
+
+Use bundle analyzers to track and enforce these limits.
+
+## Image Optimization
+- Use Next.js `<Image>` component (automatic optimization)
+- Serve modern formats (WebP, AVIF) with fallbacks
+- Properly size images (srcset for responsive)
+- Lazy load images below the fold
+- Provide width and height to prevent CLS
+- Use placeholder blur for better perceived performance
+
+```tsx
+// ✅ Good
+<Image
+  src="/hero.jpg"
+  alt="Hero image"
+  width={1200}
+  height={600}
+  priority // for above-the-fold images
+  placeholder="blur"
+/>
+
+// ❌ Bad
+<img src="/hero.jpg" alt="Hero" />
+```
+
+## Code Splitting
+- Dynamic imports for routes and heavy components
+- Lazy load modals, dialogs, and non-critical features
+- Split vendor bundles intelligently
+- Prefetch critical routes with Next.js Link
+
+```tsx
+// ✅ Good - lazy load modal
+const Modal = dynamic(() => import('@/components/Modal'), {
+  loading: () => <Spinner />,
+});
+
+// ❌ Bad - bundle everything
+import Modal from '@/components/Modal';
+```
+
+## Server Components (Next.js)
+- Default to Server Components
+- Only use Client Components when necessary:
+  - useState, useEffect, event handlers
+  - Browser-only APIs
+  - Third-party components requiring client
+- Keep Client Components small and leaf-level
+- Fetch data in Server Components when possible
+
+## Data Fetching Patterns
+- Parallel data fetching (avoid waterfalls)
+- Cache aggressively with proper revalidation
+- Use `loading.tsx` for streaming
+- Implement pagination for large lists
+- Debounce search inputs
+- Use SWR/React Query for client-side caching
+
+```tsx
+// ✅ Good - parallel fetching
+const [user, posts] = await Promise.all([
+  fetchUser(id),
+  fetchPosts(id)
+]);
+
+// ❌ Bad - waterfall
+const user = await fetchUser(id);
+const posts = await fetchPosts(id); // waits for user
+```
+
+## React Performance
+- Memoize expensive calculations with `useMemo`
+- Memoize callbacks with `useCallback` when passing to children
+- Use `React.memo()` for expensive components
+- Virtualize long lists (react-window, react-virtuoso)
+- Avoid inline object/array creation in render
+- Key lists properly (stable, unique keys)
+
+```tsx
+// ✅ Good
+const expensiveValue = useMemo(() => 
+  computeExpensiveValue(data), 
+  [data]
+);
+
+// ❌ Bad - recomputes every render
+const expensiveValue = computeExpensiveValue(data);
+```
+
+## Font Loading
+- Use `next/font` for automatic optimization
+- Preload critical fonts
+- Use font-display: swap to prevent FOIT
+- Limit font variants (weights, styles)
+- Subset fonts when possible
+
+## Third-Party Scripts
+- Load scripts asynchronously
+- Use Next.js `<Script>` component with proper strategy
+- Self-host analytics when possible
+- Lazy load non-critical scripts (chat widgets, etc.)
+- Use facades for heavy embeds (YouTube, maps)
+
+```tsx
+// ✅ Good
+<Script 
+  src="https://analytics.example.com/script.js" 
+  strategy="afterInteractive" 
+/>
+
+// ❌ Bad
+<script src="https://analytics.example.com/script.js"></script>
+```
+
+## CSS Performance
+- Use Tailwind's JIT mode (eliminates unused CSS)
+- Avoid CSS-in-JS for critical path
+- Inline critical CSS
+- Remove unused CSS with PurgeCSS/Tailwind
+- Use CSS containment for complex layouts
+
+## Database & API Performance
+- Index database queries properly
+- Implement query result caching
+- Use database connection pooling
+- Paginate large result sets
+- Use SELECT specific fields (not SELECT *)
+- Avoid N+1 queries
+- Set appropriate cache headers
+
+## Monitoring
+- Track Core Web Vitals in production (Vercel Analytics, Google Analytics)
+- Set performance budgets in CI/CD
+- Monitor bundle size changes in PRs
+- Use Lighthouse CI for automated checks
+- Alert on performance regressions
+
+## Performance Checklist
+
+Before shipping:
+
+- [ ] Lighthouse score > 90 (Performance)
+- [ ] Core Web Vitals meet targets
+- [ ] Images optimized and lazy loaded
+- [ ] Bundle size within budget
+- [ ] Critical paths optimized
+- [ ] Server Components used where possible
+- [ ] No unnecessary client-side JavaScript
+- [ ] Fonts optimized with next/font
+- [ ] Third-party scripts loaded efficiently
+- [ ] Database queries indexed and optimized

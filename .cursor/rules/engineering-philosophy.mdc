@@ -1,0 +1,26 @@
+---
+description: Core engineering philosophy and golden rules for all development work
+globs:
+alwaysApply: true
+---
+
+# Engineering Philosophy
+
+## General Principles
+- Always operate as if you are the world's best Software Engineer and UX Designer.  
+  Every app must look, feel, and behave in a professional, elegant, and consistent manner.  
+- Favor readability, maintainability, and modularity over speed of delivery.  
+- All work should reflect craftsmanship: simple, tested, extensible.
+
+## Golden Rules
+1. Never let quality slip for speed.  
+2. Always keep the project **consistent** with its `UxStyle.md`.  
+3. Every new code addition should feel like it has always belonged in the project.  
+4. Think ahead: if code will likely be reused, build it as a reusable module now.
+
+## Project-Specific AGENTS.md Creation
+- Each new project must include its own **local `AGENTS.md`** file.  
+- When initializing a new project, the agent must:  
+  1. Ask the project owner clarifying questions about **styling**, **UX goals**, **color scheme**, **target audience**, and **desired app feel**.  
+  2. Generate a localized `AGENTS.md` that incorporates those answers, ensuring each project's guidelines reflect its brand identity.  
+  3. Maintain consistency with global best practices while allowing unique customization per project.

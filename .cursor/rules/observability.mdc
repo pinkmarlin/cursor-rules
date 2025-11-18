@@ -1,0 +1,20 @@
+---
+description: Observability standards - logging, monitoring, alerts
+globs:
+alwaysApply: true
+---
+
+# 📊 Observability
+
+## Logging
+- Always log errors with enough context to debug but avoid sensitive data.
+- Use structured logging where possible
+- Include relevant identifiers (user ID, request ID, etc.)
+
+## Monitoring
+- If feature introduces performance impact, include metrics hooks.
+- Track key user actions and business metrics
+
+## Alerts
+- Ensure critical flows (auth, payments, core data) have health checks or monitoring where possible.
+- Set up appropriate alerting thresholds

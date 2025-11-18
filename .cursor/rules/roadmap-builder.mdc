@@ -1,0 +1,212 @@
+---
+description: Prioritize features and decide what to build next using impact/effort framework and stage-based rules. Use for feature prioritization, roadmap planning, and product decisions.
+globs:
+alwaysApply: false
+---
+
+# Roadmap Builder
+
+Help prioritize features and build the right things at the right time using a rigorous framework that prevents feature creep and keeps focus on what matters.
+
+## Prioritization Framework
+
+### Impact vs Effort Matrix
+
+Evaluate every feature on two dimensions:
+
+**Impact (1-5):**
+- 5 = Critical to core loop / Eliminates major blocker
+- 4 = Significantly improves key metric
+- 3 = Moderate improvement to user experience
+- 2 = Nice to have, minor benefit
+- 1 = Barely noticeable improvement
+
+**Effort (1-5):**
+- 1 = < 1 day to build
+- 2 = 1-2 days
+- 3 = 3-5 days
+- 4 = 1-2 weeks
+- 5 = > 2 weeks or requires new infrastructure
+
+**Priority calculation:**
+- Impact / Effort = Priority score
+- Example: Impact 4 / Effort 2 = 2.0 (good)
+- Example: Impact 2 / Effort 4 = 0.5 (bad)
+
+**Decision rules:**
+- Score > 2.0 = Build soon
+- Score 1.0-2.0 = Maybe later
+- Score < 1.0 = Don't build
+
+### Category Hierarchy
+
+Prioritize features by category in this order:
+
+**1. Retention (Highest Priority)**
+- Features that keep users coming back
+- Fix friction in core loop
+- Address reasons users churn
+- Examples: Performance, core UX, critical bugs
+
+**2. Core Features**
+- Directly serve the main use case
+- Enable the core user loop
+- Examples: Essential workflows, primary actions
+
+**3. Monetization**
+- Features that drive revenue
+- Convert free to paid
+- Increase willingness to pay
+- Examples: Premium features, billing improvements
+
+**4. Growth (Lowest Priority)**
+- Features that bring new users
+- Sharing mechanisms
+- Viral loops
+- Examples: Referrals, public profiles, embeds
+
+**When choosing between features:** Always pick the higher category unless the priority score difference is extreme (> 2x).
+
+## Stage-Based Rules
+
+Your product stage determines what you can build. Violating these rules leads to failure.
+
+### Pre-Launch Stage
+
+**Definition:** Before first real users
+
+**ONLY build:**
+- Core loop features (the main repeated action)
+- Minimum viable features for that loop to work
+
+**NEVER build:**
+- Settings or preferences
+- User management
+- Analytics dashboards
+- Secondary features
+- "Nice to have" items
+
+**Test:** If a feature isn't needed for the first user to get value, don't build it.
+
+### Post-Launch Stage
+
+**Definition:** Have real users (10-100+), gathering feedback
+
+**ONLY build:**
+- Features users explicitly request (not implied)
+- Features that fix measured problems
+- Features that address specific user complaints
+
+**NEVER build:**
+- Features you *think* users want
+- Features competitors have
+- Features that seem "obvious"
+
+**Validation requirements:**
+- 3+ users requested it specifically
+- OR data shows clear problem (metrics, support tickets)
+- OR blocking a conversion/payment
+
+### Growth Stage
+
+**Definition:** Product-market fit established, focusing on scale
+
+**ONLY build:**
+- Features that reduce churn (retention)
+- Features that increase sharing/referrals
+- Features that improve unit economics
+- Infrastructure for scale
+
+**Prioritize by:**
+- Churn reduction first
+- Revenue increase second
+- User acquisition third
+
+## Critical Questions Framework
+
+Ask these three questions about EVERY feature before building:
+
+### 1. Does this serve the core use case?
+
+**Red flags:**
+- "It would be nice to have"
+- "Users might want it eventually"
+- "It makes the product more complete"
+
+**Good answers:**
+- "Users can't complete the core task without this"
+- "This removes friction from the main workflow"
+- "This is blocking actual users right now"
+
+### 2. Will users actually use this or just say they want it?
+
+**Evidence hierarchy (best to worst):**
+1. Users built workarounds (highest signal)
+2. Users complained multiple times
+3. Users requested it explicitly
+4. Competitors have it and users mention switching
+5. You think users want it (lowest signal)
+
+### 3. Can we fake it first to validate demand?
+
+**Fake-it-first approaches:**
+- Manual process (you do it manually for users)
+- Waitlist/interest button (gauge demand)
+- Prototype/mockup (show concept, watch engagement)
+- Limited MVP (simplest possible version)
+
+**When to skip faking:**
+- Core loop feature (must work for product to exist)
+- Users already validated demand strongly
+- Extremely simple to build (< 1 day)
+
+## Red Flags
+
+### 🚩 Feature Creep
+- Adding features because they're "cool"
+- Copying what competitors have
+- Building features not in original scope
+
+**Fix:** Return to core use case, cut anything that doesn't clearly fit
+
+### 🚩 Premature Optimization
+- Optimizing before you have users
+- "This won't scale" arguments pre-launch
+- Engineering for edge cases
+
+**Fix:** Build the simple version, optimize when you have real data
+
+### 🚩 Building for Imaginary Users
+- "Users will want..."
+- "Everyone needs..."
+- Personas without real user validation
+
+**Fix:** Only build what real users request
+
+### 🚩 Analysis Paralysis
+- Extensive roadmap planning
+- Detailed 6-month+ plans
+- Debating features for weeks
+
+**Fix:** Plan 2-4 weeks max, decide and move forward
+
+## Quick Reference
+
+**Stage determination:**
+- Pre-launch: < 10 real users
+- Post-launch: 10-1000 users, gathering feedback
+- Growth: Product-market fit, scaling
+
+**Priority formula:**
+Priority Score = Impact (1-5) / Effort (1-5)
+
+**Category order:**
+1. Retention (keep users)
+2. Core (main use case)
+3. Monetization (revenue)
+4. Growth (new users)
+
+**Always ask:**
+1. Does this serve core use case?
+2. Will users actually use it?
+3. Can we fake it first?

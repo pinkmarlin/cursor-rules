@@ -1,0 +1,30 @@
+---
+description: Standard tech stack requirements - Next.js, Tailwind, Auth.js, Resend, Stripe, Convex
+globs:
+alwaysApply: true
+---
+
+# Tech Stack Standards
+
+## Required Stack for Web Apps
+Every web app project must explicitly use:
+- **Next.js (latest version)**  
+- **Tailwind CSS (latest stable)**  
+- **Auth.js** for authentication  
+- **Resend** for email functionality (if emails are used)  
+- **Stripe** for any payment functionality (latest SDK version, secure server-side integration only)  
+- **Convex** for all data and file storage needs (as the unified backend layer)  
+- **Google Sign-In** as the **initial auth provider** (additional providers can be added later)
+
+## Payment Integration
+- When Stripe is used for multi-organization or multi-user payouts, **Stripe Connect** must be implemented for compliant fund distribution.
+
+## Backend Layer
+- Convex must handle **database management, file storage, and real-time sync** where applicable.
+- Ensure proper configuration for responsive UI, accessibility, and security compliance across all integrations.
+
+## Package Management
+- Always use **bun** as the package manager.
+
+## Authentication
+- For authentication flows, follow the markdown guides located in `~/Documents/auth0-guide`.

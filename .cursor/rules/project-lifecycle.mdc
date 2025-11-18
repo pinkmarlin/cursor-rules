@@ -1,0 +1,51 @@
+---
+description: Project lifecycle management - PRDs, deprecation policy, migration guides
+globs:
+alwaysApply: true
+---
+
+# 🏗️ Project Lifecycle
+
+## Product Requirements & Planning
+- All new features must be captured as Product Requirement Documents in `prds/{feature}.md`.  
+- Every PRD includes YAML frontmatter:
+
+```yaml
+---
+title: Short descriptive name
+created: YYYY-MM-DD
+status: draft | in-progress | approved | shipped | deprecated
+owner: Name
+log:
+  - YYYY-MM-DD: Initial requirements documented
+  - YYYY-MM-DD: Progress update or plan change
+---
+```
+
+## PRD Sections (Minimum)
+- **Problem** - What problem are we solving?
+- **Business Context** - Why does this matter?
+- **Goals & KPIs** - How do we measure success?
+- **Personas/Journeys** - Who is this for and how will they use it?
+- **Functional Requirements** - What must it do?
+- **Non-functional Requirements** - Performance, security, etc.
+- **Data & Integrations** - What systems are involved?
+- **Open Questions** - What needs clarification?
+- **Risks & Mitigations** - What could go wrong?
+- **Success Metrics** - Specific measurable outcomes
+- **Rollout Plan** - How will we launch?
+- **Next Steps** - Immediate actions
+
+## Keeping PRDs Current
+- PRDs must be kept current—update status, requirements, decisions, and log entries as work progresses
+- Include links to shipped artifacts or changes
+
+## Deprecation Policy
+- Mark features/components as `@deprecated` in comments before removal.
+- Provide clear migration paths
+- Give adequate notice before removing deprecated features
+
+## Migration Guides
+- If changing folder structure, provide a migration section in `CHANGELOG.md`.
+- Document breaking changes clearly
+- Provide example code for migrations
