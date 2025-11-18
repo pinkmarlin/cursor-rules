@@ -1,21 +1,14 @@
 ---
-description: Documentation standards - JSDoc/TSDoc, changelogs, README files
+description: Documentation standards
 globs:
 alwaysApply: true
 ---
 
 # 📂 Documentation
 
-## Autodocs
-- Every new component must have JSDoc/TSDoc annotations.
-
-## Changelog
-- Update `CHANGELOG.md` with every meaningful change.
-
-## Readmes
-- Each new utility or feature directory should include a minimal `README.md` explaining its purpose.
-
-## Documentation Completeness
-- Documentation should be clear, concise, and up-to-date
-- Include examples where helpful
-- Document edge cases and known limitations
+## Standards
+- JSDoc/TSDoc on all components
+- Update `CHANGELOG.md` with every meaningful change
+- Each feature/utility directory gets a minimal `README.md`
+- Clear, concise, up-to-date docs
+- Include examples and edge cases

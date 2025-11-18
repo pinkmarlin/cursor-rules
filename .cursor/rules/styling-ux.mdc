@@ -1,29 +1,31 @@
 ---
-description: Styling and UX guidelines - UxStyle.md requirements, navigation, modals, design system
+description: Styling and UX guidelines
 globs:
 alwaysApply: true
 ---
 
 # Styling & UX
 
-## UxStyle.md Requirement
-- Each project **must define a `UxStyle.md`** in the root of the repo.
-  - This file sets the unique UX style, branding, and design patterns for the lifetime of the project.
-  - Any changes to `UxStyle.md` must be observed and immediately reflected in development.
-  - Example sections: color palette, typography, spacing, motion, accessibility.
+## UxStyle.md Required
+- Each project defines `UxStyle.md` in repo root
+- Sets UX style, branding, design patterns
+- Changes reflected immediately in development
+- Sections: color palette, typography, spacing, motion, accessibility
 
-## Headers and Navigation
-- Headers and navigation bars must look and feel **professional, intuitive, and consistent** with the project's visual identity.
-- Primary navigation must keep the brand mark visible across breakpoints and provide an accessible mobile menu toggle that opens a right-side overlay/portal when space is constrained; ensure keyboard support and smooth transitions.
+## Headers & Navigation
+- Professional, intuitive, consistent with brand
+- Brand mark visible across breakpoints
+- Accessible mobile menu (right-side overlay)
+- Keyboard support, smooth transitions
 
-## No Browser Prompts/Alerts
-- **NEVER** use native browser `alert()`, `confirm()`, or `prompt()` functions. 
-- Instead, build a **branded modal component** that:
-  - Matches the app's design system and theme
+## No Browser Prompts
+- Never use `alert()`, `confirm()`, `prompt()`
+- Build branded modal component instead:
+  - Matches design system and theme
   - Supports dark/light modes
-  - Is a reusable shared component that can handle multiple use cases (confirmations, notifications, forms)
-  - Provides smooth animations and professional UX
-  - Maintains accessibility standards (focus management, keyboard navigation, ARIA attributes)
+  - Reusable for multiple use cases
+  - Smooth animations, professional UX
+  - Accessibility: focus management, keyboard nav, ARIA
 
-## Design System Direction
-- Agents must request clarification from the project owner for **style and UX direction** before defining local design systems or layout conventions.
+## Design Direction
+- Request style/UX clarification before defining design systems

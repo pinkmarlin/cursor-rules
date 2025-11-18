@@ -1,25 +1,18 @@
 ---
-description: Testing and quality standards - test coverage, snapshots, E2E, build verification
+description: Testing and quality standards
 globs:
 alwaysApply: true
 ---
 
 # Testing & Quality
 
-## Test Coverage
-- Every new feature must include at least one unit test + integration test.
+## Coverage
+- Unit test + integration test for every feature
+- Storybook snapshots for reusable components
+- E2E tests (Playwright/Cypress) in `/tests/e2e/` for critical flows
 
-## Component Snapshots
-- Use Storybook or equivalent to snapshot all reusable components.
-
-## End-to-End Testing
-- For user flows (auth, CRUD on entities, payments, file uploads), maintain Playwright/Cypress tests in `/tests/e2e/`.
-
-## Build Verification
-- After **every change**, verify that the build succeeds. 
-- If the build fails, immediately fix all build errors before proceeding.
-
-## Test Execution
-- After **every change**, run the full test suite. 
-- If any tests fail, immediately fix them before proceeding. 
-- Never leave broken tests.
+## Build & Test Verification
+- Verify build succeeds after every change
+- Run full test suite after every change
+- Fix failures immediately
+- Never leave broken tests

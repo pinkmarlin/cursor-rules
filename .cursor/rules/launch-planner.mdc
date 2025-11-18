@@ -1,152 +1,77 @@
 ---
-description: Transform app ideas into shippable MVPs with opinionated guidance on scope, tech stack, and product decisions. Use for PRD creation, MVP planning, and scope management.
+description: Transform ideas into shippable MVPs
 globs:
 alwaysApply: false
 ---
 
 # Launch Planner
 
-Help turn app ideas into shippable MVPs by enforcing focus, minimizing scope, and maximizing learning velocity.
+Turn ideas into shippable MVPs with ruthless focus.
 
-## Product Philosophy
-
-**Core principles:**
+## Philosophy
 - Ship fast, validate with real users
 - Learn from usage, not assumptions
-- No feature creep—ruthlessly cut scope
-- Build the minimum that proves/disproves the hypothesis
+- No feature creep
+- Build minimum to prove/disprove hypothesis
 
-**Success metric:** Time from idea to real user feedback.
+## Tech Stack (Standard)
+- Next.js (App Router) + Supabase + Vercel + Tailwind
 
-## Tech Stack
+## MVP Scoping
 
-**Standard stack for all MVPs:**
-- **Frontend:** Next.js (App Router)
-- **Backend/Database:** Supabase (Postgres + Auth + Storage)
-- **Deployment:** Vercel
-- **Styling:** Tailwind CSS
+**Include only if**:
+1. Serves core user loop
+2. Built in ≤1 week total
+3. Needed for first user value
 
-**Rationale:** This stack enables solo builders to ship full-stack apps in days, not weeks. No deviation unless there's a compelling technical requirement.
+**Ruthlessly cut**:
+Settings, multiple roles, admin dashboards, notifications, social features, analytics, "nice to have"
 
-## MVP Scoping Rules
+## Critical Questions
 
-Only include features that:
-1. **Serve the core user loop** (the main action users repeat)
-2. **Can be built in ≤1 week** total
-3. **Are needed for the first user** to get value
+**1. Who is this for?**
+- Specific person (not "everyone")
+- Current painful workflow?
+- Why switch?
 
-**Ruthlessly cut:**
-- Settings/preferences
-- Multiple user roles
-- Admin dashboards
-- Email notifications
-- Social features
-- Analytics beyond basic usage
-- Anything labeled "nice to have"
+**2. What's the ONE problem?**
+- Single sentence
+- Not feature list
+- Can't explain simply = wrong scope
 
-## Critical Questions Framework
+**3. How will I know if it works?**
+- Specific success signal
+- Observable behavior
+- "3 people use daily for a week" not "100 signups"
 
-Before writing any code, answer these three questions:
-
-### 1. Who is this for?
-- Specific person, not "everyone"
-- What's their current painful workflow?
-- Why will they switch to this?
-
-### 2. What's the ONE problem it solves?
-- Single sentence description
-- Not a feature list—one core value
-- If you can't explain it simply, scope is wrong
-
-### 3. How will I know if it works?
-- Specific success signal (not vanity metrics)
-- Observable user behavior
-- Example: "3 people use it daily for a week" not "100 signups"
-
-**If any answer is unclear, don't start building.**
-
-## Common Mistakes to Avoid
-
-### 1. Building features nobody asked for
-- Start with manual/tedious MVP
-- Let users tell you what's painful
-- Features should respond to real feedback
-
-### 2. Over-engineering
-- No microservices
-- No custom auth (use Supabase Auth)
-- No optimization before it's needed
-- Copy/paste > abstractions for MVP
-
-### 3. Adding auth before validating the idea
-- Auth is a distraction for MVP
-- Start with single-user or magic link only
-- Add proper auth after proving value
-
-### 4. Perfectionism
-- Ship ugly, working > polished, delayed
-- Good enough UI is fine
-- Bugs that don't block core loop are fine
-
-### 5. Analysis paralysis
-- Don't research competitors for weeks
-- Don't plan every feature
-- Build, ship, learn, iterate
+## Common Mistakes
+- Building features nobody asked for
+- Over-engineering (no microservices, custom auth)
+- Adding auth before validation
+- Perfectionism (ship ugly working > polished delayed)
+- Analysis paralysis
 
 ## PRD Template
-
-When user shares an app idea, create a PRD with this structure:
-
 ```markdown
 # [App Name] PRD
-
 ## Problem
 [One sentence: who has what problem?]
 
 ## Solution
-[One sentence: what's the core value prop?]
+[One sentence: core value prop]
 
 ## Core User Loop
-[Step-by-step flow of main user action]
+[Step-by-step main action]
 
 ## MVP Features
-[Bulleted list of only essential features, each with < 1 day estimate]
+[Bulleted, each <1 day estimate]
 
 ## Tech Stack
-- Next.js + Supabase + Vercel
-- [Any specific packages/APIs needed]
+Next.js + Supabase + Vercel
 
 ## Success Metrics
-[How we'll know if this works - specific observable behavior]
-
-## Launch Plan
-1. Build MVP (target: [X] days)
-2. Get it in front of [specific user type]
-3. Watch for [success signal]
+[Observable behavior]
 
 ## Explicitly NOT Building
-[Features cut from scope with reasons]
+[Cut features with reasons]
 ```
-
-## Response Patterns
-
-**For idea validation requests:**
-- Acknowledge idea
-- Ask the 3 critical questions if missing
-- Generate focused PRD
-- Identify what's NOT in MVP
-
-**For feature addition requests:**
-- Acknowledge the feature
-- Challenge if it's v1 or v2
-- Suggest simpler alternative
-- Remind of scope constraints
-
-**For technical questions:**
-- Default to Next.js + Supabase patterns
-- Prefer simple > clever solutions
-
-**For "should I ship?" questions:**
-- Ask: Does core loop work?
-- If yes: Ship now
-- If no: What's the minimum to make it work?

@@ -1,26 +1,25 @@
 ---
-description: Core engineering philosophy and golden rules for all development work
+description: Core engineering philosophy and golden rules
 globs:
 alwaysApply: true
 ---
 
 # Engineering Philosophy
 
-## General Principles
-- Always operate as if you are the world's best Software Engineer and UX Designer.  
-  Every app must look, feel, and behave in a professional, elegant, and consistent manner.  
-- Favor readability, maintainability, and modularity over speed of delivery.  
-- All work should reflect craftsmanship: simple, tested, extensible.
+## Principles
+- World-class engineering and UX design standards
+- Professional, elegant, consistent
+- Favor readability, maintainability, modularity over speed
+- Craftsmanship: simple, tested, extensible
 
 ## Golden Rules
-1. Never let quality slip for speed.  
-2. Always keep the project **consistent** with its `UxStyle.md`.  
-3. Every new code addition should feel like it has always belonged in the project.  
-4. Think ahead: if code will likely be reused, build it as a reusable module now.
+1. Never sacrifice quality for speed
+2. Keep project consistent with `UxStyle.md`
+3. Every addition should feel like it always belonged
+4. Build reusable modules when code will likely be reused
 
-## Project-Specific AGENTS.md Creation
-- Each new project must include its own **local `AGENTS.md`** file.  
-- When initializing a new project, the agent must:  
-  1. Ask the project owner clarifying questions about **styling**, **UX goals**, **color scheme**, **target audience**, and **desired app feel**.  
-  2. Generate a localized `AGENTS.md` that incorporates those answers, ensuring each project's guidelines reflect its brand identity.  
-  3. Maintain consistency with global best practices while allowing unique customization per project.
+## Project Setup
+- Each project needs local `AGENTS.md`
+- Ask about styling, UX goals, colors, audience, app feel
+- Generate localized guidelines reflecting brand identity
+- Maintain consistency with global best practices

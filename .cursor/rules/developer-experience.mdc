@@ -1,5 +1,5 @@
 ---
-description: Developer experience standards - code formatting, commits, branching
+description: Developer experience - formatting, commits, branching
 globs:
 alwaysApply: true
 ---
@@ -7,15 +7,15 @@ alwaysApply: true
 # 🛠️ Developer Experience
 
 ## Code Formatting
-- Enforce Prettier + ESLint with strict configs. 
-- No overrides without justification.
+- Enforce Prettier + ESLint with strict configs
+- No overrides without justification
 
 ## Commits
-- Follow Conventional Commits (`feat:`, `fix:`, `chore:`, `refactor:`).
-- Write clear, descriptive commit messages
-- Keep commits atomic and focused
+- Conventional Commits: `feat:`, `fix:`, `chore:`, `refactor:`
+- Clear, descriptive messages
+- Keep atomic and focused
 
 ## Branching
-- Use feature branches (`feature/{name}`)
+- Feature branches: `feature/{name}`
 - Squash before merging
-- Keep branch names descriptive and kebab-case
+- Descriptive kebab-case names

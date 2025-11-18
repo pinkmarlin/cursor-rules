@@ -1,22 +1,19 @@
 ---
-description: Security and compliance standards - secrets management, data privacy, auth validation
+description: Security and compliance standards
 globs:
 alwaysApply: true
 ---
 
 # 🔒 Security & Compliance
 
-## Secrets Management
-- Never hardcode secrets, API keys, or credentials. 
-- Always use environment variables.
+## Secrets
+- Never hardcode secrets, API keys, credentials
+- Always use environment variables
 
 ## Data Privacy
-- Any user data handled must comply with GDPR/CCPA-style principles:
-  - Minimal collection
-  - Explicit purpose
-  - Secure storage
+- GDPR/CCPA compliance: minimal collection, explicit purpose, secure storage
 
-## Auth Flows
-- Always validate tokens server-side
+## Auth
+- Validate tokens server-side
 - Never trust client-side state
-- Implement proper session management
+- Proper session management

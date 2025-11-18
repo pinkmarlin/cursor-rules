@@ -1,17 +1,15 @@
 ---
-description: TypeScript and linting standards - no ts-nocheck, strict typing, respect lint rules
-globs:
-  - "**/*.ts"
-  - "**/*.tsx"
+description: TypeScript and linting standards
+globs: ["**/*.ts", "**/*.tsx"]
 alwaysApply: true
 ---
 
 # TypeScript & Linting
 
 ## TypeScript Strictness
-- **Do not use** `@ts-nocheck`. 
-- If typing errors exist, fix the typings properly.
+- No `@ts-nocheck`
+- Fix typings properly
 
 ## Lint Rules
-- Lint rules and TypeScript strictness must always be respected.
-- Never bypass or ignore linting errors without proper justification.
+- Respect all lint rules and TypeScript strictness
+- No bypassing without proper justification
