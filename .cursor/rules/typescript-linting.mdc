@@ -1,15 +1,96 @@
 ---
-description: TypeScript and linting standards
-globs: ["**/*.ts", "**/*.tsx"]
+description: Static Code Checks for Node.js Projects
+globs: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.mjs", "**/*.cjs"]
 alwaysApply: true
 ---
 
-# TypeScript & Linting
+# 🔍 Static Code Checks for Node.js Projects
 
-## TypeScript Strictness
-- No `@ts-nocheck`
-- Fix typings properly
+## Overview
+All Node.js code must pass static analysis checks when a prompt for a feature is completed and before being committed. This ensures code quality, security, maintainability, and consistency across the project.
 
-## Lint Rules
-- Respect all lint rules and TypeScript strictness
-- No bypassing without proper justification
+### Recommended Tools
+- **ESLint**: Code linting and quality checks
+- **Prettier**: Code formatting
+- **TypeScript**: Type checking
+- **npm audit**: Security vulnerability scanning
+- **lint-staged**: Run linters on staged files
+
+### Code Review Checklist
+When reviewing code, verify:
+- [ ] No TypeScript errors or warnings
+- [ ] ESLint passes without errors
+- [ ] Code follows formatting standards using prettier
+- [ ] Error handling is present
+- [ ] No security issues
+- [ ] Dependencies are up to date
+
+
+### Type Safety
+- **No `@ts-nocheck` or `@ts-ignore`** without explicit justification in comments
+- **Fix type errors properly** - don't bypass type checking
+- Use proper type definitions for all functions, parameters, and return values
+- Avoid `any` type - use `unknown` or proper types instead
+- Enable strict TypeScript mode: `strict: true` in tsconfig.json
+- Use type guards and assertions appropriately
+- types should be defined in their own files that are appended with `.types.ts`
+- imports of types should always declare `import type` 
+
+### Code Quality Rules
+- **Respect all ESLint rules** - no disabling without proper justification
+- **No console.log in production code** - use proper logging library
+- **No commented-out code** - remove or explain why it's kept
+- **No magic numbers** - use named constants
+- **No unused variables or imports** - clean up code
+- **No duplicate code** - extract to functions/utilities
+
+## Linting Requirements
+
+### ESLint Configuration
+- All code must pass ESLint checks
+- Use project-specific ESLint configuration
+
+### Disabling Rules
+- Only disable ESLint rules with explicit comments explaining why
+- Format: `// eslint-disable-next-line rule-name -- reason`
+- Prefer fixing the issue over disabling the rule
+
+## Code Formatting
+
+### Prettier Standards
+- All code must be formatted with Prettier
+- Use consistent formatting across the project
+- No manual formatting - let Prettier handle it
+
+## Security Checks
+
+### Security Best Practices
+- **No hardcoded secrets** - use environment variables or secure vaults
+- **Sanitize user input** - validate and sanitize all external input
+- **Use parameterized queries** - prevent SQL injection
+- **Check dependencies** - run `npm audit` regularly
+- **No eval() or Function() constructor** - security risk
+- **Set secure headers** - use helmet.js or similar
+
+### Dependency Management
+- Keep dependencies up to date
+- Remove unused dependencies
+- Use exact versions or lock files (package-lock.json)
+- Review security advisories regularly
+- Prefer well-maintained packages
+
+## Error Handling
+
+### Error Handling Standards
+- **Always handle errors** - don't ignore catch blocks
+- **Use specific error types** - create custom errors when appropriate
+- **Log errors properly** - include context and stack traces
+- **Don't expose internal errors** - sanitize error messages for users
+- **Use try-catch appropriately** - handle async errors with try-catch or .catch()
+- **Throw meaningful errors** - include helpful error messages
+
+### Async/Await Best Practices
+- Always use try-catch with async/await
+- Handle promise rejections properly
+- Use Promise.all() for parallel operations
+- Don't forget await - catch missing await warnings
